@@ -1,0 +1,28 @@
+---
+title: "National Election Survey"
+author: "Dominic Skinnion"
+date: "11/12/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(googlesheets4)
+library(tidyverse)
+```
+
+```{r data, echo = FALSE}
+sheets_deauth()
+data <- read_sheet("13NhlT-Oik5P4NOKRWwrJ7xZQlddFNk81HHEw9wkWglM")
+```
+```{r}
+data %>%
+  ggplot(aes(x = partisanship, y = dvote, alpha = 0.01)) +
+    geom_jitter(height = 0.1) +
+    geom_smooth(method = "lm", se = FALSE)
+```
+
+```{r}
+model <- glm(data = data, dvote ~ partisanship, family = binomial(link = "logit"))
+```
+
